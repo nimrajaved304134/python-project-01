@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import os
-import zipfile
 from io import BytesIO
 
 # Set Page Config First
@@ -38,9 +37,7 @@ st.markdown("""
             text-align: center;
             font-weight: bold;
         }
-
     </style>
-    <div class="background"></div>
 """, unsafe_allow_html=True)
 
 st.markdown('<h1 class="title">📂 Data Sweeper - Advanced File Converter</h1>', unsafe_allow_html=True)
@@ -51,7 +48,6 @@ upload_files = st.file_uploader("Upload your files (CSV, Excel, JSON):", type=["
 
 # Process Files
 if upload_files:
-    converted_files = []
     for file in upload_files:
         file_ext = os.path.splitext(file.name)[-1].lower()
         
@@ -60,7 +56,7 @@ if upload_files:
             if file_ext == ".csv":
                 df = pd.read_csv(file)
             elif file_ext == ".xlsx":
-                df = pd.read_excel(file)
+                df = pd.read_excel(file, engine='openpyxl')  # Ensure openpyxl is used
             elif file_ext == ".json":
                 df = pd.read_json(file)
             else:
